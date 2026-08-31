@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0.0",
+  "source_id": "sw-fixture-0002-bbbb",
+  "mode": "Idea Inbox",
+  "captured_at": "2026-08-20T18:47:51Z",
+  "transcript": "Fabricated fixture transcript. Reminder to call the fictional plumber, Riverside Plumbing Co, about the slow drain in the upstairs bathroom before the weekend.",
+  "first_pass_note": "Call Riverside Plumbing Co about slow upstairs drain before the weekend.",
+  "language": "en",
+  "duration_seconds": 9.7,
+  "device": "fixture-generator/1.0"
+}

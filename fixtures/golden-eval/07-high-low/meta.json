@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0.0",
+  "source_id": "sw-golden-0007-high-low",
+  "mode": "Idea Inbox",
+  "captured_at": "2026-08-07T09:00:00Z",
+  "transcript": "Fixture transcript, recorded in a rush, audio muffled: water... dripping... under the sink, maybe the fictional building's unit 4B, need to check now or it might flood, not totally sure which unit.",
+  "first_pass_note": "Possible water leak under a sink, urgent, unit unclear (maybe 4B).",
+  "language": "en",
+  "duration_seconds": 4.4,
+  "device": "fixture-generator/1.0"
+}

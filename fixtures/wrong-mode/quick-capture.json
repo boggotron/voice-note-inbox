@@ -1,0 +1,9 @@
+{
+  "schema_version": "1.0.0",
+  "source_id": "sw-fixture-0020-2222",
+  "mode": "Quick Capture",
+  "captured_at": "2026-08-16T08:30:00Z",
+  "transcript": "Fixture transcript for a recording made in a different Superwhisper mode than the pipeline's required 'Idea Inbox' mode.",
+  "first_pass_note": "Fixture first-pass note for a non-Idea-Inbox mode recording.",
+  "language": "en"
+}

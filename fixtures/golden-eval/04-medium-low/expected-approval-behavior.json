@@ -1,0 +1,4 @@
+{
+  "expected_approval_state": "pending",
+  "rationale": "Illustrative forward-looking annotation: low model confidence would warrant human review before filing, even at medium urgency. Current MVP pipeline always writes \"not_requested\" regardless."
+}

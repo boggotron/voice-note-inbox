@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0.0",
+  "source_id": "sw-golden-0008-high-medium",
+  "mode": "Idea Inbox",
+  "captured_at": "2026-08-08T09:00:00Z",
+  "transcript": "Fixture transcript: the fictional staging server for project Aurora is down, needs to be escalated to the on-call engineer right away, this is blocking tomorrow's demo.",
+  "first_pass_note": "Aurora staging server down, escalate to on-call immediately, blocks tomorrow's demo.",
+  "language": "en",
+  "duration_seconds": 8.0,
+  "device": "fixture-generator/1.0"
+}

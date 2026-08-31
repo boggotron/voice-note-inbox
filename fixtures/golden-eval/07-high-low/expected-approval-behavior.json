@@ -1,0 +1,4 @@
+{
+  "expected_approval_state": "pending",
+  "rationale": "Illustrative forward-looking annotation: high urgency combined with low confidence is the strongest case for human review before any downstream action under a future gate. Current MVP pipeline always writes \"not_requested\" regardless (it also takes no downstream action beyond filing)."
+}

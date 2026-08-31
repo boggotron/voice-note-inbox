@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0.0",
+  "source_id": "sw-golden-0009-high-high",
+  "mode": "Idea Inbox",
+  "captured_at": "2026-08-09T09:00:00Z",
+  "transcript": "Fixture transcript, clearly spoken: fictional prescription for patient Jamie runs out tomorrow, need to call the pharmacy first thing in the morning to refill it, no other errands attached.",
+  "first_pass_note": "Jamie's prescription runs out tomorrow; call pharmacy first thing to refill.",
+  "language": "en",
+  "duration_seconds": 6.9,
+  "device": "fixture-generator/1.0"
+}

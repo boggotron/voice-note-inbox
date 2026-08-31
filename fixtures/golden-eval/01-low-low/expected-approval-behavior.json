@@ -1,0 +1,4 @@
+{
+  "expected_approval_state": "pending",
+  "rationale": "Illustrative forward-looking annotation for the future approval gate (#7): low model confidence would warrant human review before filing. NOTE: the current MVP pipeline always writes approval_state \"not_requested\" for every record, since no approval workflow is implemented yet -- this field does not represent current pipeline output, only an evaluation-harness expectation for a future gating rule."
+}

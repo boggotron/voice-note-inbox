@@ -1,0 +1,8 @@
+{
+  "schema_version": "1.0.0",
+  "source_id": "sw-fixture-0010-eeee",
+  "mode": "Idea Inbox",
+  "captured_at": "2026-08-15T10:00:00Z",
+  "first_pass_note": "Fixture note present, but transcript field is entirely missing to exercise the incomplete-metadata rejection path.",
+  "language": "en"
+}

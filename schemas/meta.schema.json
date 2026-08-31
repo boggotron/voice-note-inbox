@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/boggotron/voice-note-inbox/schemas/meta.schema.json",
+  "title": "Superwhisper Capture Metadata (meta.json)",
+  "description": "Shape of the meta.json file Superwhisper writes per recording. FIRST VERSION, based on the plan document's description (exact 'Idea Inbox' mode field, non-empty transcript and first-pass-note fields, recorded per capture) rather than a real Superwhisper export, since no real Superwhisper output has been made available to compare against yet. Field names and the additionalProperties:true tolerance are a deliberate best guess and are expected to be revised once real output is inspected. The exact-mode business rule ('mode' must equal \"Idea Inbox\" for this pipeline to process the recording) is intentionally NOT enforced by this schema as a `const`/`enum` restriction -- Superwhisper supports many modes, and rejecting the wrong ones is an intake-workflow business rule (see local-voice-inbox-mvp-implementation-plan.md), not a structural-validity concern. A meta.json with mode: \"Quick Capture\" is still a structurally valid meta.json.",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0",
+      "description": "Version of this schema the record was produced against."
+    },
+    "source_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable identifier for this recording/capture (e.g. Superwhisper recording UUID or folder name). Used downstream as part of the idempotency key."
+    },
+    "mode": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Superwhisper capture mode name as configured by the user, e.g. \"Idea Inbox\". The intake workflow requires an exact match against \"Idea Inbox\"; other values are structurally valid but must be rejected by the workflow, not this schema."
+    },
+    "captured_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp the recording was captured, ISO 8601."
+    },
+    "transcript": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Raw speech-to-text transcript. Must be non-empty for the recording to be processed."
+    },
+    "first_pass_note": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Superwhisper's own first-pass cleanup/summary note produced at capture time. Must be non-empty for the recording to be processed."
+    },
+    "language": {
+      "type": "string",
+      "description": "Detected or configured transcription language, e.g. \"en\"."
+    },
+    "duration_seconds": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Recording duration in seconds."
+    },
+    "device": {
+      "type": "string",
+      "description": "Recording device or app/version identifier, free text."
+    }
+  },
+  "required": [
+    "schema_version",
+    "source_id",
+    "mode",
+    "captured_at",
+    "transcript",
+    "first_pass_note"
+  ],
+  "additionalProperties": true
+}

@@ -1,0 +1,9 @@
+{
+  "schema_version": "1.0.0",
+  "source_id": "sw-fixture-0011-ffff",
+  "mode": "Idea Inbox",
+  "captured_at": "2026-08-15T11:00:00Z",
+  "transcript": "Fixture transcript is present here, but the first_pass_note field below is an empty string, which must fail schema validation (minLength: 1).",
+  "first_pass_note": "",
+  "language": "en"
+}

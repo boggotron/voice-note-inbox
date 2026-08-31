@@ -1,0 +1,4 @@
+{
+  "expected_approval_state": "pending",
+  "rationale": "Illustrative forward-looking annotation: high urgency triggers the illustrative future review rule even though confidence is high, since a time-critical item is worth a quick human glance before the retention window matters. Current MVP pipeline always writes \"not_requested\" regardless."
+}

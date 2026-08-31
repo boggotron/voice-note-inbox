@@ -1,0 +1,4 @@
+{
+  "expected_approval_state": "not_requested",
+  "rationale": "Illustrative forward-looking annotation: neither low confidence nor high urgency triggers the illustrative future review rule. Matches current MVP pipeline behavior, which always writes \"not_requested\"."
+}

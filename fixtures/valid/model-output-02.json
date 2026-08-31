@@ -1,0 +1,12 @@
+{
+  "title": "Call Riverside Plumbing about slow drain",
+  "summary": "Upstairs bathroom drain is slow; call the fictional Riverside Plumbing Co before the weekend to schedule a fix.",
+  "actions": [
+    "Call Riverside Plumbing Co",
+    "Schedule drain repair before the weekend"
+  ],
+  "project": "Home maintenance",
+  "unknowns": [],
+  "urgency": "medium",
+  "confidence": "high"
+}

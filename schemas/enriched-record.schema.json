@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/boggotron/voice-note-inbox/schemas/enriched-record.schema.json",
+  "title": "VoiceInboxEnrichedRecord",
+  "description": "Durable record persisted by the intake workflow for each successfully processed capture: capture metadata, source reference, transcript, first-pass note, model result, workflow/prompt/schema version fields, and approval_state (see local-voice-inbox-mvp-implementation-plan.md, 'Implementation Changes'). approval_state must always include 'not_requested' -- the only value the MVP pipeline currently writes, since no approval workflow exists yet. Other enum values are reserved for a future approval gate.",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0",
+      "description": "Version of this enriched-record schema. Breaking changes require a major version bump and a migration note; additive fields are minor-version only."
+    },
+    "record_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Unique identifier for this enriched record."
+    },
+    "source": {
+      "type": "object",
+      "description": "Reference back to the originating Superwhisper capture, and the idempotency key used to detect duplicate events.",
+      "properties": {
+        "source_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Superwhisper recording identifier (matches capture_metadata.source_id)."
+        },
+        "source_path_hash": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Hash of the source recording path/identity, used as the idempotency key so a repeated event is not re-processed."
+        },
+        "captured_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Original capture timestamp, copied from capture_metadata for convenient querying."
+        }
+      },
+      "required": ["source_id", "source_path_hash", "captured_at"],
+      "additionalProperties": false
+    },
+    "capture_metadata": {
+      "$ref": "https://github.com/boggotron/voice-note-inbox/schemas/meta.schema.json",
+      "description": "The full original Superwhisper meta.json payload for this capture."
+    },
+    "transcript": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Raw transcript, denormalized from capture_metadata.transcript for direct access."
+    },
+    "first_pass_note": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Superwhisper first-pass note, denormalized from capture_metadata.first_pass_note."
+    },
+    "model_result": {
+      "$ref": "https://github.com/boggotron/voice-note-inbox/schemas/model-output.schema.json",
+      "description": "Structured output returned by the OpenAI Responses API call for this capture."
+    },
+    "workflow_version": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Version/tag of the n8n intake workflow definition that produced this record."
+    },
+    "prompt_version": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Version/tag of the enrichment prompt used for this record."
+    },
+    "model_config_version": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Version/tag of the single configurable model value (model name + reasoning tier together, e.g. 'gpt-5.6-luna:low') used for this record. See 'Model configuration decision' in the plan document."
+    },
+    "approval_state": {
+      "type": "string",
+      "enum": ["not_requested", "pending", "approved", "rejected"],
+      "description": "Human approval state for this record. The MVP pipeline always writes 'not_requested'; the other values are reserved for a future approval workflow and are not produced by this version of the system."
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp this enriched record was written to the durable inbox."
+    }
+  },
+  "required": [
+    "schema_version",
+    "record_id",
+    "source",
+    "capture_metadata",
+    "transcript",
+    "first_pass_note",
+    "model_result",
+    "workflow_version",
+    "prompt_version",
+    "model_config_version",
+    "approval_state",
+    "created_at"
+  ],
+  "additionalProperties": false
+}

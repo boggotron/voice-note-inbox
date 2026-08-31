@@ -1,0 +1,9 @@
+{
+  "schema_version": "1.0.0",
+  "source_id": "sw-fixture-0021-3333",
+  "mode": "Meeting Notes",
+  "captured_at": "2026-08-16T09:15:00Z",
+  "transcript": "Fixture transcript for a recording made in the 'Meeting Notes' Superwhisper mode, which the intake workflow must reject even though it is a structurally valid meta.json.",
+  "first_pass_note": "Fixture first-pass note for a Meeting Notes mode recording.",
+  "language": "en"
+}

@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0.0",
+  "dead_letter_id": "e2f3a4b5-4d5e-4f6a-9b7c-8d9e0a1b2c34",
+  "source_id": "sw-fixture-0004-dddd",
+  "first_seen_at": "2026-08-23T11:15:00Z",
+  "last_attempt_at": "2026-08-23T12:17:00Z",
+  "error_class": "transient",
+  "error_message": "OpenAI Responses API returned HTTP 429 on all 4 attempts; retry budget exhausted.",
+  "request_id": "req_fixture_synthetic_0004",
+  "attempt_history": [
+    {
+      "attempt_number": 1,
+      "attempted_at": "2026-08-23T11:15:00Z",
+      "outcome": "transient_failure",
+      "error_class": "transient",
+      "error_message": "HTTP 429 rate limited."
+    },
+    {
+      "attempt_number": 2,
+      "attempted_at": "2026-08-23T11:17:00Z",
+      "outcome": "transient_failure",
+      "error_class": "transient",
+      "error_message": "HTTP 429 rate limited."
+    },
+    {
+      "attempt_number": 3,
+      "attempted_at": "2026-08-23T11:27:00Z",
+      "outcome": "transient_failure",
+      "error_class": "transient",
+      "error_message": "HTTP 429 rate limited."
+    },
+    {
+      "attempt_number": 4,
+      "attempted_at": "2026-08-23T12:17:00Z",
+      "outcome": "transient_failure",
+      "error_class": "transient",
+      "error_message": "HTTP 429 rate limited."
+    }
+  ],
+  "remediation_hint": "Check OpenAI account rate limits/usage tier before re-queuing this source_id; consider raising the backoff schedule if this recurs."
+}

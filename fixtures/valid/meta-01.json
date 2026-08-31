@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0.0",
+  "source_id": "sw-fixture-0001-aaaa",
+  "mode": "Idea Inbox",
+  "captured_at": "2026-08-14T09:12:03Z",
+  "transcript": "This is a synthetic fixture transcript. Idea: set up a small lending library box at the end of the driveway, ask the neighborhood group if anyone wants to contribute books.",
+  "first_pass_note": "Neighborhood lending library idea, check with neighborhood group first.",
+  "language": "en",
+  "duration_seconds": 18.4,
+  "device": "fixture-generator/1.0"
+}

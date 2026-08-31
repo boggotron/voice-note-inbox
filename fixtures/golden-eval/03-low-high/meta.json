@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0.0",
+  "source_id": "sw-golden-0003-low-high",
+  "mode": "Idea Inbox",
+  "captured_at": "2026-08-03T09:00:00Z",
+  "transcript": "Fixture transcript, clearly spoken: reminder to reorganize the bookshelf in the study by color sometime this month, purely cosmetic, no rush at all.",
+  "first_pass_note": "Reorganize study bookshelf by color sometime this month, purely cosmetic.",
+  "language": "en",
+  "duration_seconds": 7.8,
+  "device": "fixture-generator/1.0"
+}

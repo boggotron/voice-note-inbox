@@ -1,0 +1,14 @@
+{
+  "title": "Reorganize a shelf (location unclear)",
+  "summary": "Vague idea to reorganize a shelf, possibly in the garage or basement; recording quality made the exact location unclear.",
+  "actions": [
+    "Decide whether the shelf is in the garage or basement before planning further"
+  ],
+  "project": null,
+  "unknowns": [
+    "Whether the shelf is in the garage or the basement",
+    "What 'reorganizing' specifically involves"
+  ],
+  "urgency": "low",
+  "confidence": "low"
+}

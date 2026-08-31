@@ -1,0 +1,11 @@
+{
+  "title": "Schedule Alex's dentist appointment",
+  "summary": "Alex's dentist appointment is overdue by two months and should be booked this week.",
+  "actions": [
+    "Book Alex's dentist appointment this week"
+  ],
+  "project": "Health",
+  "unknowns": [],
+  "urgency": "medium",
+  "confidence": "high"
+}
