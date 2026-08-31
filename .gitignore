@@ -5,3 +5,41 @@ start-claude-agentic-engineering.sh
 start-codex-agentic-engineering.sh
 
 .DS_Store
+
+# --- Repo hygiene gate list (issue #1) ---
+# Never commit real secrets; only the checked-in example is allowed.
+.env*
+!.env.example
+
+# Live/local runtime data for the voice-inbox pipeline. This is a public
+# repo: recordings, model output, logs, and failed-item records must never
+# be tracked, even accidentally via a local symlink or copy.
+recordings/
+output/
+logs/
+dead-letter/
+
+# n8n runtime state: named-volume bind mounts, database exports/dumps,
+# and encryption-key/credential exports. n8n workflow JSON is sanitized
+# and tracked deliberately elsewhere; this only blocks the runtime state.
+n8n_data/
+n8n-data/
+.n8n/
+*.sqlite
+*.sqlite3
+*.db
+*.dump
+*dump*.sql
+*dump*.sql.gz
+
+# Backups
+*.bak
+*.backup
+backup/
+backups/
+
+# Test/CI artefacts
+test-results/
+test-artifacts/
+coverage/
+*.tmp
