@@ -5,3 +5,18 @@ start-claude-agentic-engineering.sh
 start-codex-agentic-engineering.sh
 
 .DS_Store
+
+# Local n8n deployment (issue #3) — local-only secrets and data.
+# The full repo-hygiene gate list (recordings/, output/, logs/,
+# dead-letter/, credential exports, volume dumps, etc.) is tracked in
+# issue #1; these entries are the minimal subset issue #3 depends on
+# so `.env` can never be committed and the bind-mount targets this
+# compose file references never accidentally get tracked.
+.env
+.env.*
+!.env.example
+!deploy/.env.example
+recordings/
+output/
+logs/
+dead-letter/

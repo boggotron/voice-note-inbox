@@ -1,0 +1,93 @@
+########################################################################
+# Voice Inbox — local n8n deployment
+#
+# Scope (see GitHub issue #3): stand up a sanitized, reproducible local
+# n8n instance. This file defines *where the deployment boundary is* —
+# it does not include the intake workflow itself (#5) or CI validation
+# of this config (#4).
+#
+# Usage:
+#   cp deploy/.env.example deploy/.env
+#   # edit deploy/.env — set N8N_ENCRYPTION_KEY and the host data paths
+#   docker compose --project-directory deploy -f deploy/docker-compose.yml up -d
+#
+# All variables referenced below (${VAR}) are documented, with safe
+# defaults or empty placeholders, in deploy/.env.example. Real values
+# belong only in a local, gitignored deploy/.env — never in this file.
+########################################################################
+
+services:
+  n8n:
+    # Pinned by content digest, not a mutable tag. Resolved from the
+    # `n8nio/n8n:stable` tag on Docker Hub via the registry API on
+    # 2026-08-31 (see deploy/README.md / task report for how this was
+    # obtained and how to re-resolve it later). This is a multi-arch
+    # image index (linux/amd64, linux/arm64); Docker selects the right
+    # platform manifest automatically.
+    image: n8nio/n8n@sha256:cfe2704ff858395503d42548206c2c99ea351a205e941063a9d9b77b0f404478
+    container_name: voice-inbox-n8n
+    restart: unless-stopped
+
+    # Localhost-only binding: n8n's HTTP interface is only ever reachable
+    # from the host machine, never from the LAN or a container's default
+    # bridge exposure to 0.0.0.0.
+    ports:
+      - "127.0.0.1:${N8N_HOST_PORT:-5678}:5678"
+
+    environment:
+      # --- Core ---
+      # Required. Generate with e.g. `openssl rand -hex 32`. Encrypts
+      # n8n's credential store. Must never be committed; lives only in
+      # the local, gitignored deploy/.env.
+      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY:?N8N_ENCRYPTION_KEY must be set in deploy/.env}
+      - N8N_PORT=5678
+      - GENERIC_TIMEZONE=${GENERIC_TIMEZONE:-UTC}
+      - TZ=${GENERIC_TIMEZONE:-UTC}
+
+      # --- Node allow-list: keep Execute Command disabled ---
+      # NODES_EXCLUDE takes a JSON array of node type identifiers.
+      # n8n already blocks Execute Command (n8n-nodes-base.executeCommand)
+      # by default, but we pin the exclusion explicitly here so the
+      # control is visible in this file and does not silently change
+      # if n8n's own defaults ever change. Read/Write Files From Disk is
+      # excluded too since this deployment bind-mounts real filesystem
+      # paths and that node would let a workflow write outside the
+      # intended output root.
+      - NODES_EXCLUDE=["n8n-nodes-base.executeCommand","n8n-nodes-base.readWriteFile"]
+
+      # --- Execution data retention ---
+      # Do not persist full payload data for successful executions.
+      - EXECUTIONS_DATA_SAVE_ON_SUCCESS=none
+      # Keep failure data — it's the diagnostic trail — but only briefly.
+      - EXECUTIONS_DATA_SAVE_ON_ERROR=all
+      - EXECUTIONS_DATA_PRUNE=true
+      - EXECUTIONS_DATA_MAX_AGE=${EXECUTIONS_DATA_MAX_AGE_HOURS:-72}
+      - EXECUTIONS_DATA_PRUNE_MAX_COUNT=${EXECUTIONS_DATA_PRUNE_MAX_COUNT:-1000}
+
+      # --- Privacy hardening (not required by issue #3's acceptance
+      # criteria, but low-risk and consistent with "no live data ever
+      # leaves this boundary") ---
+      - N8N_DIAGNOSTICS_ENABLED=false
+
+    volumes:
+      # n8n application state (workflows, credentials store, execution
+      # history, encryption-key-derived data) lives in a named,
+      # Docker-managed volume — never a bind mount into the Git tree.
+      - n8n_data:/home/node/.n8n
+
+      # Superwhisper recordings: READ-ONLY. The workflow must never be
+      # able to mutate or delete source recordings.
+      - ${RECORDINGS_HOST_PATH:-../recordings}:/data/recordings:ro
+
+      # Inbox/output root: READ-WRITE. Where processed idea records land.
+      - ${OUTPUT_HOST_PATH:-../output}:/data/output:rw
+
+      # Structured, transcript-free diagnostic logs: READ-WRITE.
+      - ${LOGS_HOST_PATH:-../logs}:/data/logs:rw
+
+      # Terminal/exhausted-retry records: READ-WRITE.
+      - ${DEAD_LETTER_HOST_PATH:-../dead-letter}:/data/dead-letter:rw
+
+volumes:
+  n8n_data:
+    name: voice-inbox-n8n-data
