@@ -1,0 +1,7 @@
+.agentic-engineering/
+.agentic-engineering-claude/
+.claude/
+start-claude-agentic-engineering.sh
+start-codex-agentic-engineering.sh
+
+.DS_Store
