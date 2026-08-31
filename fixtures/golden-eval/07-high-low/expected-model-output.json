@@ -1,0 +1,15 @@
+{
+  "title": "Possible water leak under a sink",
+  "summary": "Muffled, rushed recording describing a possible water leak under a sink, potentially in unit 4B of a fictional building; needs immediate checking to avoid flooding, but the unit is not certain.",
+  "actions": [
+    "Check for a water leak under the sink immediately",
+    "Confirm which unit is affected before it floods"
+  ],
+  "project": null,
+  "unknowns": [
+    "Which unit the leak is in (possibly 4B)",
+    "Whether the leak has already caused damage"
+  ],
+  "urgency": "high",
+  "confidence": "low"
+}

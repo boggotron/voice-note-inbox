@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0.0",
+  "source_id": "sw-golden-0005-medium-medium",
+  "mode": "Idea Inbox",
+  "captured_at": "2026-08-05T09:00:00Z",
+  "transcript": "Fixture transcript: need to email the fictional vendor Acme Supply about a discrepancy on last month's invoice, want to get it sorted this week.",
+  "first_pass_note": "Email Acme Supply about invoice discrepancy, sort this week.",
+  "language": "en",
+  "duration_seconds": 6.6,
+  "device": "fixture-generator/1.0"
+}

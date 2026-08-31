@@ -1,0 +1,6 @@
+{
+  "schema_version": "1.0.0",
+  "source_id": "sw-fixture-0030-4444",
+  "mode": "Idea Inbox",
+  "captured_at": "2026-08-17T07:00:00Z",
+  "transcript": "This file is intentionally truncated mid-write to simulate Superwhisper being interrupted while writing meta.json (e.g. app killed, disk full).

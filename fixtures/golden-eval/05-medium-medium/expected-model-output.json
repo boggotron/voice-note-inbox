@@ -1,0 +1,14 @@
+{
+  "title": "Email Acme Supply about invoice discrepancy",
+  "summary": "Needs to email the fictional vendor Acme Supply about a discrepancy on last month's invoice, aiming to resolve it this week.",
+  "actions": [
+    "Email Acme Supply about the invoice discrepancy",
+    "Resolve the discrepancy by end of this week"
+  ],
+  "project": "Acme Supply",
+  "unknowns": [
+    "The exact nature of the invoice discrepancy"
+  ],
+  "urgency": "medium",
+  "confidence": "medium"
+}

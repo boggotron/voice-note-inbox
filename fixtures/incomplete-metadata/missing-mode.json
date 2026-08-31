@@ -1,0 +1,8 @@
+{
+  "schema_version": "1.0.0",
+  "source_id": "sw-fixture-0012-1111",
+  "captured_at": "2026-08-15T12:00:00Z",
+  "transcript": "Fixture transcript present, but the mode field is entirely missing to exercise the incomplete-metadata rejection path.",
+  "first_pass_note": "Fixture first-pass note present.",
+  "language": "en"
+}

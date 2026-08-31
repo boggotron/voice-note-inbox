@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/boggotron/voice-note-inbox/schemas/dead-letter-record.schema.json",
+  "title": "VoiceInboxDeadLetterRecord",
+  "description": "Append-only, structured, transcript-free diagnostic record written when a capture exhausts retries or fails terminally (see 'Add layered error handling' in local-voice-inbox-mvp-implementation-plan.md). By construction this schema has no field for transcript, first-pass note, prompt content, or any other capture content -- only identifiers, timestamps, error classification, and remediation metadata. Consumers (including a future Gmail alert and a future AI issue-reviewer) must be able to read this record without ever seeing capture content.",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0",
+      "description": "Version of this dead-letter-record schema."
+    },
+    "dead_letter_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Unique identifier for this dead-letter entry."
+    },
+    "source_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Superwhisper recording identifier of the capture that failed (matches meta.source_id). Contains no content, only an identifier."
+    },
+    "first_seen_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp of the first processing attempt for this source."
+    },
+    "last_attempt_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp of the most recent processing attempt for this source."
+    },
+    "error_class": {
+      "type": "string",
+      "enum": ["transient", "model_output_repairable", "terminal"],
+      "description": "Final failure classification, per the plan's error-handling taxonomy."
+    },
+    "error_message": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Sanitized error message/summary. Must not contain transcript, prompt, or credential content -- enforced by process/review convention, not by this schema."
+    },
+    "request_id": {
+      "type": ["string", "null"],
+      "description": "Upstream (e.g. OpenAI) request ID associated with the failing attempt, if one exists; null for failures with no upstream request (e.g. local disk-write failure)."
+    },
+    "attempt_history": {
+      "type": "array",
+      "description": "Ordered log of processing attempts for this source, oldest first.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "attempt_number": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "1-based attempt count."
+          },
+          "attempted_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp this attempt was made."
+          },
+          "outcome": {
+            "type": "string",
+            "enum": ["transient_failure", "model_output_repair_failed", "terminal_failure", "succeeded"],
+            "description": "Outcome of this specific attempt."
+          },
+          "error_class": {
+            "type": ["string", "null"],
+            "enum": ["transient", "model_output_repairable", "terminal", null],
+            "description": "Failure classification for this specific attempt, or null if the attempt succeeded."
+          },
+          "error_message": {
+            "type": ["string", "null"],
+            "description": "Sanitized error message for this specific attempt, or null if the attempt succeeded."
+          }
+        },
+        "required": ["attempt_number", "attempted_at", "outcome", "error_class", "error_message"],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "remediation_hint": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Short, human-actionable suggestion for resolving this dead-letter entry (e.g. 'check OpenAI API key configuration')."
+    }
+  },
+  "required": [
+    "schema_version",
+    "dead_letter_id",
+    "source_id",
+    "first_seen_at",
+    "last_attempt_at",
+    "error_class",
+    "error_message",
+    "request_id",
+    "attempt_history",
+    "remediation_hint"
+  ],
+  "additionalProperties": false
+}

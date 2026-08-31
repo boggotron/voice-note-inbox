@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0.0",
+  "record_id": "b6f1f9d2-1a2b-4c3d-8e4f-5a6b7c8d9e01",
+  "source": {
+    "source_id": "sw-fixture-0001-aaaa",
+    "source_path_hash": "sha256:1f2e3d4c5b6a7988776655443322110ffeeddccbbaa99887766554433221100",
+    "captured_at": "2026-08-14T09:12:03Z"
+  },
+  "capture_metadata": {
+    "schema_version": "1.0.0",
+    "source_id": "sw-fixture-0001-aaaa",
+    "mode": "Idea Inbox",
+    "captured_at": "2026-08-14T09:12:03Z",
+    "transcript": "This is a synthetic fixture transcript. Idea: set up a small lending library box at the end of the driveway, ask the neighborhood group if anyone wants to contribute books.",
+    "first_pass_note": "Neighborhood lending library idea, check with neighborhood group first.",
+    "language": "en",
+    "duration_seconds": 18.4,
+    "device": "fixture-generator/1.0"
+  },
+  "transcript": "This is a synthetic fixture transcript. Idea: set up a small lending library box at the end of the driveway, ask the neighborhood group if anyone wants to contribute books.",
+  "first_pass_note": "Neighborhood lending library idea, check with neighborhood group first.",
+  "model_result": {
+    "title": "Neighborhood lending library box",
+    "summary": "Idea to install a small book-lending library box at the end of the driveway; plans to check with the neighborhood group before building it.",
+    "actions": [
+      "Post in neighborhood group asking who wants to contribute books",
+      "Research small lending library box designs"
+    ],
+    "project": "Neighborhood",
+    "unknowns": [
+      "Whether the neighborhood group allows structures on shared verges"
+    ],
+    "urgency": "low",
+    "confidence": "medium"
+  },
+  "workflow_version": "intake-workflow@0.1.0",
+  "prompt_version": "enrichment-prompt@0.1.0",
+  "model_config_version": "gpt-5.6-luna:low@0.1.0",
+  "approval_state": "not_requested",
+  "created_at": "2026-08-14T09:13:10Z"
+}

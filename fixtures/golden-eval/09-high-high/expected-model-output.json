@@ -1,0 +1,12 @@
+{
+  "title": "Refill Jamie's prescription",
+  "summary": "Jamie's prescription runs out tomorrow; the pharmacy must be called first thing in the morning to refill it.",
+  "actions": [
+    "Call the pharmacy first thing tomorrow morning",
+    "Refill Jamie's prescription before it runs out"
+  ],
+  "project": "Health",
+  "unknowns": [],
+  "urgency": "high",
+  "confidence": "high"
+}

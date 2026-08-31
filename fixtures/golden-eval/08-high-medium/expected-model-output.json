@@ -1,0 +1,13 @@
+{
+  "title": "Aurora staging server down",
+  "summary": "The fictional Aurora project's staging server is down and needs immediate escalation to the on-call engineer, since it blocks tomorrow's demo.",
+  "actions": [
+    "Escalate Aurora staging outage to the on-call engineer immediately"
+  ],
+  "project": "Aurora",
+  "unknowns": [
+    "Root cause of the staging server outage"
+  ],
+  "urgency": "high",
+  "confidence": "medium"
+}

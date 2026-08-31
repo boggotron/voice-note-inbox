@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0.0",
+  "dead_letter_id": "d1e2f3a4-3c4d-4e5f-8a6b-7c8d9e0a1b23",
+  "source_id": "sw-fixture-0003-cccc",
+  "first_seen_at": "2026-08-22T07:01:00Z",
+  "last_attempt_at": "2026-08-22T08:03:00Z",
+  "error_class": "terminal",
+  "error_message": "OpenAI Responses API returned HTTP 401: invalid API key configuration.",
+  "request_id": null,
+  "attempt_history": [
+    {
+      "attempt_number": 1,
+      "attempted_at": "2026-08-22T07:01:00Z",
+      "outcome": "terminal_failure",
+      "error_class": "terminal",
+      "error_message": "OpenAI Responses API returned HTTP 401: invalid API key configuration."
+    }
+  ],
+  "remediation_hint": "Check the OpenAI API key stored in the local n8n credential store and re-run the intake workflow for this source_id."
+}

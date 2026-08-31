@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0.0",
+  "record_id": "c7a2e0d3-2b3c-4d4e-9f5a-6b7c8d9e0a12",
+  "source": {
+    "source_id": "sw-fixture-0002-bbbb",
+    "source_path_hash": "sha256:2e3d4c5b6a798877665544332211ffeeddccbbaa998877665544332211ff00aa",
+    "captured_at": "2026-08-20T18:47:51Z"
+  },
+  "capture_metadata": {
+    "schema_version": "1.0.0",
+    "source_id": "sw-fixture-0002-bbbb",
+    "mode": "Idea Inbox",
+    "captured_at": "2026-08-20T18:47:51Z",
+    "transcript": "Fabricated fixture transcript. Reminder to call the fictional plumber, Riverside Plumbing Co, about the slow drain in the upstairs bathroom before the weekend.",
+    "first_pass_note": "Call Riverside Plumbing Co about slow upstairs drain before the weekend.",
+    "language": "en",
+    "duration_seconds": 9.7,
+    "device": "fixture-generator/1.0"
+  },
+  "transcript": "Fabricated fixture transcript. Reminder to call the fictional plumber, Riverside Plumbing Co, about the slow drain in the upstairs bathroom before the weekend.",
+  "first_pass_note": "Call Riverside Plumbing Co about slow upstairs drain before the weekend.",
+  "model_result": {
+    "title": "Call Riverside Plumbing about slow drain",
+    "summary": "Upstairs bathroom drain is slow; call the fictional Riverside Plumbing Co before the weekend to schedule a fix.",
+    "actions": [
+      "Call Riverside Plumbing Co",
+      "Schedule drain repair before the weekend"
+    ],
+    "project": "Home maintenance",
+    "unknowns": [],
+    "urgency": "medium",
+    "confidence": "high"
+  },
+  "workflow_version": "intake-workflow@0.1.0",
+  "prompt_version": "enrichment-prompt@0.1.0",
+  "model_config_version": "gpt-5.6-luna:low@0.1.0",
+  "approval_state": "not_requested",
+  "created_at": "2026-08-20T18:48:32Z"
+}

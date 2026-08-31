@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0.0",
+  "source_id": "sw-golden-0006-medium-high",
+  "mode": "Idea Inbox",
+  "captured_at": "2026-08-06T09:00:00Z",
+  "transcript": "Fixture transcript, clearly spoken: need to schedule a dentist appointment for the fictional patient Alex, been putting it off for two months, should book this week.",
+  "first_pass_note": "Schedule Alex's dentist appointment this week, overdue by two months.",
+  "language": "en",
+  "duration_seconds": 7.3,
+  "device": "fixture-generator/1.0"
+}

@@ -1,0 +1,9 @@
+{
+  "schema_version": "1.0.0",
+  "source_id": "sw-fixture-0040-6666",
+  "mode": "Idea Inbox",
+  "captured_at": "2026-08-18T14:00:00Z",
+  "transcript": "Fixture transcript representing a capture whose filesystem event fires twice (e.g. the watcher sees both the temp-file write and the final rename), used to test the intake workflow's idempotency key.",
+  "first_pass_note": "Fixture first-pass note for the duplicate-event test case.",
+  "language": "en"
+}

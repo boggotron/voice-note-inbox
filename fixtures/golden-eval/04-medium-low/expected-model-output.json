@@ -1,0 +1,14 @@
+{
+  "title": "Follow up with Northwind Traders",
+  "summary": "Needs to follow up with the fictional client Northwind Traders before end of month, but the recording is unclear on whether it concerns a contract or an invoice.",
+  "actions": [
+    "Contact Northwind Traders before end of month",
+    "Clarify whether the follow-up is about the contract or the invoice"
+  ],
+  "project": "Northwind Traders",
+  "unknowns": [
+    "Whether the follow-up concerns a contract or an invoice"
+  ],
+  "urgency": "medium",
+  "confidence": "low"
+}

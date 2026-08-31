@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0.0",
+  "source_id": "sw-golden-0004-medium-low",
+  "mode": "Idea Inbox",
+  "captured_at": "2026-08-04T09:00:00Z",
+  "transcript": "Fixture transcript, audio partly clipped: ...something about following up with the fictional client, Northwind Traders, about the... contract? invoice? before end of month.",
+  "first_pass_note": "Follow up with Northwind Traders about contract or invoice before end of month, unclear which.",
+  "language": "en",
+  "duration_seconds": 8.9,
+  "device": "fixture-generator/1.0"
+}
