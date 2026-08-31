@@ -18,12 +18,10 @@ secret — tracked in this repository, please report it as described below.
 
 ## Reporting a Vulnerability
 
-Please report security issues privately rather than opening a public GitHub
-issue. Use one of the following, in order of preference:
-
-1. **GitHub Private Vulnerability Reporting**: open a report via the
-   repository's [Security tab](https://github.com/boggotron/voice-note-inbox/security/advisories/new).
-2. **Email**: [abogdan.inbox@gmail.com](mailto:abogdan.inbox@gmail.com).
+Please report security issues privately via GitHub Private Vulnerability
+Reporting: open a report via the repository's
+[Security tab](https://github.com/boggotron/voice-note-inbox/security/advisories/new).
+Please do not open a public GitHub issue for security reports.
 
 Please include:
 
