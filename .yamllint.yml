@@ -1,0 +1,16 @@
+---
+# yamllint config for this repo.
+#
+# GitHub Actions workflow files legitimately use bare `on:`/`off:`-shaped
+# keys (the `on:` trigger key) and can have long lines (URLs, expressions),
+# so the default "truthy" and "line-length" rules are relaxed here rather
+# than disabled per-file.
+extends: default
+
+rules:
+  line-length: disable
+  document-start: disable
+  truthy:
+    allowed-values: ["true", "false", "on", "off"]
+    check-keys: false
+  comments-indentation: disable

@@ -1,0 +1,230 @@
+name: PR checks
+
+# Pull-request-time verification for the voice-note-inbox repo (issue #4).
+#
+# Three independently reported checks so branch protection (issue #1) can
+# require each by name: `validate`, `scan`, `smoke-test`. This repo is
+# authored against a pipeline whose supporting pieces (schemas/fixtures in
+# #2, the Compose deployment in #3, the n8n workflow in #5) are not yet
+# merged to main. Every step here degrades gracefully (skip + exit 0) when
+# the file/tool it depends on doesn't exist yet, and activates automatically
+# once those PRs land — nothing here should need editing when #2/#3 merge.
+#
+# No job uses, or needs, any real secret: no OPENAI_API_KEY, no Gmail
+# credential, no production data. Only synthetic fixtures are ever touched.
+
+on:
+  pull_request:
+
+# No workflow-level access by default; each job opts in to the minimum it
+# needs (read-only in every case - no job in this workflow needs write
+# access to contents, PRs, checks, or any other resource).
+permissions: {}
+
+concurrency:
+  group: pr-checks-${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  # ---------------------------------------------------------------------
+  # validate: JSON/YAML lint, JSON Schema validation, script lint.
+  # ---------------------------------------------------------------------
+  validate:
+    name: validate
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+
+      - name: Set up Python
+        uses: actions/setup-python@e797f83bcb11b83ae66e0230d6156d7c80228e7c  # v6.0.0
+        with:
+          python-version: "3.12"
+
+      - name: Install lint/validation tooling
+        run: |
+          set -euo pipefail
+          python3 -m pip install --disable-pip-version-check --no-input \
+            yamllint==1.38.0 \
+            check-jsonschema==0.38.0
+
+      - name: YAML lint
+        run: yamllint -c .yamllint.yml .
+
+      - name: actionlint (workflow files)
+        run: |
+          set -euo pipefail
+          ACTIONLINT_VERSION="1.7.12"
+          ACTIONLINT_SHA256="8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8"
+          curl -sSL -o /tmp/actionlint.tar.gz \
+            "https://github.com/rhysd/actionlint/releases/download/v${ACTIONLINT_VERSION}/actionlint_${ACTIONLINT_VERSION}_linux_amd64.tar.gz"
+          echo "${ACTIONLINT_SHA256}  /tmp/actionlint.tar.gz" | sha256sum -c -
+          tar -xzf /tmp/actionlint.tar.gz -C /tmp actionlint
+          /tmp/actionlint -color
+
+      - name: JSON Schema meta-validation (schemas/*.json)
+        run: |
+          set -euo pipefail
+          if compgen -G "schemas/*.json" > /dev/null; then
+            for f in schemas/*.json; do
+              echo "Checking metaschema validity: ${f}"
+              check-jsonschema --check-metaschema "${f}"
+            done
+          else
+            echo "validate: schemas/ not yet present (expected until #2 merges) - skipping meta-schema check"
+          fi
+
+      - name: Fixture validation against schemas
+        run: |
+          set -euo pipefail
+          if [ -f scripts/validate_fixtures.py ]; then
+            echo "validate: running scripts/validate_fixtures.py"
+            python3 scripts/validate_fixtures.py
+          else
+            echo "validate: scripts/validate_fixtures.py not yet present (expected until #2 merges) - skipping fixture validation"
+          fi
+
+      - name: Shell script lint (bash -n)
+        run: |
+          set -euo pipefail
+          found=0
+          while IFS= read -r -d '' f; do
+            found=1
+            echo "Checking: ${f}"
+            bash -n "${f}"
+          done < <(find . -path ./.git -prune -o -name '*.sh' -print0)
+          if [ "${found}" -eq 0 ]; then
+            echo "validate: no .sh scripts found - nothing to lint"
+          fi
+
+  # ---------------------------------------------------------------------
+  # scan: secret scanning, tracked-file data scan, dependency scan,
+  # container/Compose config validation.
+  # ---------------------------------------------------------------------
+  scan:
+    name: scan
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout (full history for secret scan)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Secret scan (gitleaks)
+        uses: gitleaks/gitleaks-action@e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e  # v3.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # No GITLEAKS_LICENSE: only required for GitHub Organization
+          # accounts, not personal accounts, per gitleaks-action's docs.
+          # boggotron/voice-note-inbox is a personal-account repo.
+          GITLEAKS_ENABLE_COMMENTS: "false"
+          GITLEAKS_ENABLE_UPLOAD_ARTIFACT: "false"
+
+      - name: Tracked-file data scan
+        run: |
+          set -euo pipefail
+          echo "scan: checking tracked files for disallowed runtime/data paths..."
+          tracked="$(mktemp)"
+          violations="$(mktemp)"
+          git ls-files > "${tracked}"
+
+          # Paths that must never be tracked (recordings/output/logs/dead-letter).
+          grep -E '^(recordings|output|logs|dead-letter)/' "${tracked}" >> "${violations}" || true
+
+          # n8n runtime state / db exports / credential exports / real .env
+          # files (".env.example" is intentionally allowed - it ends in
+          # ".example", not ".env").
+          grep -E '\.(sqlite3?|db)$|(^|/)\.n8n(/|$)|n8n_data/|credentials\.json$|workflows?_export|(^|/)\.env$' "${tracked}" >> "${violations}" || true
+
+          if [ -s "${violations}" ]; then
+            echo "::error::Disallowed tracked file(s) found (must never be committed):"
+            sort -u "${violations}"
+            exit 1
+          fi
+          echo "scan: no disallowed tracked data files found"
+
+      - name: Dependency scan
+        run: |
+          set -euo pipefail
+          if [ -f package.json ]; then
+            echo "scan: package.json detected, running npm audit"
+            npm audit --audit-level=high
+          elif [ -f requirements.txt ] || [ -f pyproject.toml ]; then
+            echo "scan: Python dependency manifest detected, running pip-audit"
+            python3 -m pip install --disable-pip-version-check --no-input --quiet pip-audit==2.7.3
+            if [ -f requirements.txt ]; then
+              python3 -m pip_audit -r requirements.txt
+            else
+              python3 -m pip_audit
+            fi
+          else
+            echo "scan: no dependency manifest/lockfile present - nothing to scan yet (activates automatically once one is added)"
+          fi
+
+      - name: Container/Compose config validation
+        run: |
+          set -euo pipefail
+          COMPOSE_FILE="deploy/docker-compose.yml"
+          if [ ! -f "${COMPOSE_FILE}" ]; then
+            echo "scan: ${COMPOSE_FILE} not yet present (expected until #3 merges) - skipping compose validation"
+            exit 0
+          fi
+          echo "scan: validating ${COMPOSE_FILE}"
+          rendered="$(docker compose -f "${COMPOSE_FILE}" config)"
+          echo "${rendered}"
+          if echo "${rendered}" | grep -qi 'latest'; then
+            echo "::error::Rendered compose config for ${COMPOSE_FILE} references 'latest'"
+            exit 1
+          fi
+          if grep -qi 'latest' "${COMPOSE_FILE}"; then
+            echo "::error::${COMPOSE_FILE} source references 'latest'"
+            exit 1
+          fi
+          echo "scan: no 'latest' references found in compose source or rendered config"
+
+  # ---------------------------------------------------------------------
+  # smoke-test: bring up the Docker Compose stack with synthetic fixtures
+  # and a mocked structured model response, and assert expected state.
+  # ---------------------------------------------------------------------
+  smoke-test:
+    name: smoke-test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+
+      - name: Compose smoke test
+        run: |
+          set -euo pipefail
+          COMPOSE_FILE="deploy/docker-compose.yml"
+          if [ ! -f "${COMPOSE_FILE}" ]; then
+            echo "smoke-test: deployment/workflow not yet present, nothing to test"
+            exit 0
+          fi
+
+          echo "smoke-test: baseline compose config check"
+          docker compose -f "${COMPOSE_FILE}" config > /dev/null
+          echo "smoke-test: baseline compose config check passed"
+
+          # TODO(#5): once deploy/docker-compose.yml (#3) and the n8n intake
+          # workflow (#5) both exist, extend this job to run a real,
+          # zero-real-data smoke test:
+          #   1. docker compose -f deploy/docker-compose.yml up -d
+          #   2. wait for the n8n health endpoint to report ready
+          #   3. copy one fixture recording from fixtures/valid/ into the
+          #      recordings/ bind-mount source directory on the runner
+          #   4. stub/mock the OpenAI Responses API call (no real
+          #      OPENAI_API_KEY, no network egress to api.openai.com -
+          #      e.g. point the workflow's base URL at a local mock server
+          #      seeded with a fixed structured-output response) and assert
+          #      a resulting enriched record appears under output/
+          #   5. docker compose -f deploy/docker-compose.yml down -v
+          # Keep this scoped to startup + one synthetic happy-path event
+          # (per the plan doc's CI/CD section) - the full acceptance suite
+          # is #8, run separately.
