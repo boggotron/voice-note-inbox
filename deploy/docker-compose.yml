@@ -20,10 +20,10 @@ services:
   n8n:
     # Pinned by content digest, not a mutable tag. Resolved from the
     # `n8nio/n8n:stable` tag on Docker Hub via the registry API on
-    # 2026-08-31 (see deploy/README.md / task report for how this was
-    # obtained and how to re-resolve it later). This is a multi-arch
-    # image index (linux/amd64, linux/arm64); Docker selects the right
-    # platform manifest automatically.
+    # 2026-08-31 (see deploy/README.md for how this was obtained and
+    # how to re-resolve it later). This is a multi-arch image index
+    # (linux/amd64, linux/arm64); Docker selects the right platform
+    # manifest automatically.
     image: n8nio/n8n@sha256:cfe2704ff858395503d42548206c2c99ea351a205e941063a9d9b77b0f404478
     container_name: voice-inbox-n8n
     restart: unless-stopped
@@ -49,11 +49,14 @@ services:
       # n8n already blocks Execute Command (n8n-nodes-base.executeCommand)
       # by default, but we pin the exclusion explicitly here so the
       # control is visible in this file and does not silently change
-      # if n8n's own defaults ever change. Read/Write Files From Disk is
-      # excluded too since this deployment bind-mounts real filesystem
-      # paths and that node would let a workflow write outside the
-      # intended output root.
-      - NODES_EXCLUDE=["n8n-nodes-base.executeCommand","n8n-nodes-base.readWriteFile"]
+      # if n8n's own defaults ever change. Read/Write Files From Disk
+      # (n8n-nodes-base.readWriteFile) is deliberately left enabled —
+      # issue #5's intake workflow needs it to read meta.json records
+      # and write output/dead-letter files under the mounted data
+      # paths. Containing its file access to those mounted paths (e.g.
+      # via N8N_RESTRICT_FILE_ACCESS_TO) is issue #5's concern, not
+      # this deployment-definition task's.
+      - NODES_EXCLUDE=["n8n-nodes-base.executeCommand"]
 
       # --- Execution data retention ---
       # Do not persist full payload data for successful executions.
